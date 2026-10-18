@@ -17,8 +17,9 @@
 
 ## 安裝
 
-1. 安裝 **AutoHotkey v2**：
-   ```powershell
+1. 安裝 **AutoHotkey v2**。
+   按 `Win + R`，輸入 `cmd` 後按 Enter 開啟**命令提示字元（cmd）**，貼上以下指令執行：
+   ```cmd
    winget install -e --id AutoHotkey.AutoHotkey
    ```
    > **注意：請安裝官方網站的「AutoHotkey v2」一般版，不要安裝 Microsoft Store 的「AutoHotkey v2 Store Edition」。**
