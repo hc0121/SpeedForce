@@ -51,6 +51,22 @@ IsZhuyinStrict(s) {
         || (syl >= 3 && keys >= 6)
 }
 
+; 從 buf 的「某個詞開頭」到結尾，找出能完整解析成注音音節的最長後綴；
+; 例如 "cmd 56vu/6" → "56vu/6"（前面的 cmd 是正常英文，保留）。找不到回傳 ""。
+ZhuyinTail(buf) {
+    s := StrLower(buf)
+    pos := 1
+    Loop {
+        cand := SubStr(s, pos)
+        if (cand != "" && RegExMatch(cand, "^(?:" SylRe ")+\s*$"))
+            return cand
+        next := InStr(s, " ", , pos)
+        if (!next || next >= StrLen(s))
+            return ""
+        pos := next + 1
+    }
+}
+
 ; 寬鬆判斷：用來「手動修正」，只要全部都是注音鍵就接受
 IsZhuyinLoose(s) {
     s := StrLower(Trim(s, " `t`r`n"))
@@ -185,7 +201,8 @@ Check(canFix := true) {
     buf := ih.Input
     if buf = "" || !AutoDetect
         return
-    if !IsZhuyinStrict(buf)
+    tail := ZhuyinTail(buf)
+    if (tail = "" || !IsZhuyinStrict(tail))
         return
     hwnd := WinExist("A")
     if !hwnd || IsChinese(hwnd)         ; 本來就在中文模式，是正常打字
@@ -196,7 +213,7 @@ Check(canFix := true) {
     }
     if BeepOnAlert
         SoundBeep 880, 120
-    Tip("⚠ 忘了切注音？   " Trim(buf) "  →  " ToZhuyin(buf)
+    Tip("⚠ 忘了切注音？   " Trim(tail) "  →  " ToZhuyin(tail)
       . "`n按 " HotkeyName " 修正" (canFix ? "" : "（請先選取打錯的字）"), 4500)
 }
 
@@ -225,8 +242,11 @@ DoFix(*) {
         return
     seq := "", fromBuf := false
     buf := ih.Input
-    if (buf != "" && IsZhuyinLoose(buf)) {
-        seq := buf, fromBuf := true
+    tail := ZhuyinTail(buf)                 ; 優先：結尾可解析成音節的那段
+    if (tail = "" && IsZhuyinLoose(buf))    ; 其次：整段都是注音鍵
+        tail := buf
+    if (tail != "") {
+        seq := tail, fromBuf := true
     } else if !WinActive("ahk_class ConsoleWindowClass") && !WinActive("ahk_class CASCADIA_HOSTING_WINDOW_CLASS") {
         saved := ClipboardAll()
         A_Clipboard := ""
@@ -245,12 +265,15 @@ DoFix(*) {
     ResetBuf()
     ok := EnsureChinese(hwnd)
     SetCapsLockState "Off"
+    trailing := StrLen(seq) - StrLen(RTrim(seq, " "))   ; 結尾空白數，重打完再補回
     if fromBuf
-        Send "{BS " StrLen(buf) "}"
-    Replay(seq)
+        Send "{BS " StrLen(seq) "}"
+    Replay(RTrim(seq, " "))
     Sleep 150
     if (ok && AutoEnter && IsComposing(hwnd) != 0) {
         Send "{Enter}"
+        if trailing
+            Send "{Space " trailing "}"
         Tip("✓ 已切到注音並重打：" ToZhuyin(seq), 2000)
     } else {
         Tip("已切到注音並重打：" ToZhuyin(seq) "`n若文字仍有底線，請按 Enter 確認", 3500)
