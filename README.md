@@ -17,10 +17,14 @@
 
 ## 安裝
 
-1. 安裝 AutoHotkey v2（一般版，非 Store 版）：
+1. 安裝 **AutoHotkey v2**：
    ```powershell
    winget install -e --id AutoHotkey.AutoHotkey
    ```
+   > **注意：請安裝官方網站的「AutoHotkey v2」一般版，不要安裝 Microsoft Store 的「AutoHotkey v2 Store Edition」。**
+   > Store 版跑在 MSIX 沙箱裡，`.ahk` 檔案關聯與開機啟動捷徑常失效，
+   > 且本工具依賴的輸入法 API（`imm32`、`WM_INPUTLANGCHANGEREQUEST`）在沙箱下行為不穩定。
+   > 手動下載請到 <https://www.autohotkey.com/> 點 **Download v2.0**。
 2. 下載本專案，雙擊 `SpeedForce.ahk`。托盤出現綠色 H 圖示即啟動成功。
 3. （可選）右鍵托盤圖示 → 勾選「開機自動啟動」。
 
