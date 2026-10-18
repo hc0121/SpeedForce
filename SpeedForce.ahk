@@ -1,5 +1,5 @@
 ; ============================================================
-;  注音救星 ZhuyinRescue  (AutoHotkey v2)
+;  Speed Force  (AutoHotkey v2)
 ;  用途：在英文模式下誤打注音按鍵（例如 su3cl3 = 你好）時，
 ;        自動提示，並可一鍵切換成微軟注音重新輸入。
 ;  熱鍵：Ctrl+Alt+Z  修正剛打的字（或先選取錯字再按）
@@ -270,7 +270,7 @@ A_TrayMenu.Add("開機自動啟動", ToggleStartup)
 A_TrayMenu.Add()
 A_TrayMenu.Add("離開", (*) => ExitApp())
 A_TrayMenu.Default := "自動偵測打錯注音"
-A_IconTip := "注音救星  (" HotkeyName " 修正)"
+A_IconTip := "Speed Force  (" HotkeyName " 修正)"
 
 ToggleDetect(*) {
     global AutoDetect
@@ -293,7 +293,7 @@ ToggleEnter(*) {
     UpdateMenu()
 }
 
-StartupLnk := A_Startup "\ZhuyinRescue.lnk"
+StartupLnk := A_Startup "\SpeedForce.lnk"
 ToggleStartup(*) {
     if FileExist(StartupLnk)
         FileDelete StartupLnk
@@ -317,4 +317,4 @@ UpdateMenu() {
     SetCheck("開機自動啟動", FileExist(StartupLnk))
 }
 UpdateMenu()
-TrayTip "注音救星已啟動", "打錯注音時會提示，按 " HotkeyName " 一鍵修正", 1
+TrayTip "Speed Force 已啟動", "打錯注音時會提示，按 " HotkeyName " 一鍵修正", 1

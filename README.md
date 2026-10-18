@@ -1,4 +1,4 @@
-# 注音救星 ZhuyinRescue
+# Speed Force
 
 > 忘了切注音，把「你好」打成 `su3cl3`？按一下熱鍵就修好。
 
@@ -21,12 +21,12 @@
    ```powershell
    winget install -e --id AutoHotkey.AutoHotkey
    ```
-2. 下載本專案，雙擊 `ZhuyinRescue.ahk`。托盤出現綠色 H 圖示即啟動成功。
+2. 下載本專案，雙擊 `SpeedForce.ahk`。托盤出現綠色 H 圖示即啟動成功。
 3. （可選）右鍵托盤圖示 → 勾選「開機自動啟動」。
 
 ## 設定
 
-打開 `ZhuyinRescue.ahk`，最上方「設定」區塊可以改：
+打開 `SpeedForce.ahk`，最上方「設定」區塊可以改：
 
 | 變數 | 預設 | 說明 |
 |---|---|---|
